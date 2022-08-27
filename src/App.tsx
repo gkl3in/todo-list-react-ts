@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import Card from './components/Card';
 import './App.css';
 
 export type Todo = {
-  id: string,
+  id: number,
   title: string,
   completed: boolean;
 }
@@ -13,11 +13,25 @@ function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   function addTodo() {
-    
+    setTodos((previousTodos) => [...previousTodos, {
+      id: Math.random(),
+      title: todoInput,
+      completed: false
+    }]);
+
+    setTodoInput('');
   }
 
-  function handleInputChange(e) {
+  function completeTodo(id: number) {
+    setTodos((previousTodos) => previousTodos.map((todo) => todo.id != id ? todo : {...todo, completed: !todo.completed}));
+  }
+
+  function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     setTodoInput(e.target.value);
+  }
+
+  function deleteTodo(id: number) {
+    setTodos((previousTodos) => previousTodos.filter((todo) => todo.id != id));
   }
 
   return (
@@ -28,7 +42,7 @@ function App() {
       </div>
       {
         todos.map(todo => (
-          <Card key={todo.id} todo={todo}/>
+          <Card key={todo.id} todo={todo} completeTodo = {completeTodo} deleteTodo={deleteTodo}/>
         ))
       }
     </div>

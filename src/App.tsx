@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import Card from './components/Card';
 import './App.css';
 
@@ -10,7 +10,19 @@ export type Todo = {
 
 function App() {
   const [todoInput, setTodoInput] = useState('');
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const storedTodos = localStorage.getItem('@codersList:todos');
+
+    if (storedTodos) {
+      return JSON.parse(storedTodos);
+    }
+
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('@codersList:todos', JSON.stringify(todos));
+  }, [todos]);
 
   function addTodo() {
     setTodos((previousTodos) => [...previousTodos, {

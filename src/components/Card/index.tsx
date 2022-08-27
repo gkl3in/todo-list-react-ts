@@ -1,13 +1,14 @@
+import { Todo } from '../../App';
 import './styles.css';
 
 type CardProps = {
-  title: string;
+  todo: Todo;
 }
 
-export default function Card({ title }: CardProps) {
+export default function Card({ todo }: CardProps) {
   return (
     <div className="card">
-      <h2>Fazer caféé</h2>
+      <h2>{todo.title}</h2>
 
       <div className="card-buttons">
         <button>Completar</button>
